@@ -45,6 +45,12 @@ export class WorkflowController {
           error: 'Validation error',
           details: error.issues,
         });
+      } else if (/redis|queue unavailable|econnrefused/i.test(error?.message || '')) {
+        res.status(503).json({
+          success: false,
+          error:
+            'Task queue is unavailable. Start Redis and retry workflow creation.',
+        });
       } else if (
         /anthropic_api_key|api key|authentication|unauthorized|forbidden/i.test(
           error?.message || ''

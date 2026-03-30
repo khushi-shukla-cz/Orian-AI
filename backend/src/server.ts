@@ -9,7 +9,6 @@ import { initializeRedis } from './queues';
 import { initializeSocket } from './sockets';
 import routes from './routes';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
-import taskWorker from './queues/taskWorker';
 
 const app: Application = express();
 const server = http.createServer(app);
@@ -48,14 +47,19 @@ const initializeServices = async () => {
     // Connect to MongoDB
     await connectDatabase();
 
-    // Connect to Redis
-    await initializeRedis();
+    // Connect to Redis (non-blocking for API availability)
+    const redisReady = await initializeRedis();
+
+    if (redisReady) {
+      // Load worker only after Redis is available.
+      await import('./queues/taskWorker');
+      logger.info('Task worker started');
+    } else {
+      logger.warn('Redis unavailable. Background task execution is disabled until Redis is up.');
+    }
 
     // Initialize Socket.IO
     initializeSocket(server);
-
-    // Start task worker
-    logger.info('Task worker started');
 
     logger.info('All services initialized successfully');
   } catch (error) {

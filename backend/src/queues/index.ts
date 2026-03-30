@@ -3,13 +3,25 @@ import { createClient } from 'redis';
 import config from '../config';
 import logger from '../utils/logger';
 
+let redisAvailable = false;
+
 // Redis connection
 const connection = createClient({
   url: config.redis.url,
 });
 
-connection.on('error', (err) => logger.error('Redis Client Error', err));
-connection.on('connect', () => logger.info('Redis Client Connected'));
+connection.on('error', (err) => {
+  redisAvailable = false;
+  logger.error('Redis Client Error', err);
+});
+connection.on('connect', () => {
+  redisAvailable = true;
+  logger.info('Redis Client Connected');
+});
+connection.on('end', () => {
+  redisAvailable = false;
+  logger.warn('Redis Client Disconnected');
+});
 
 // Task execution queue
 export const taskQueue = new Queue('workflow-tasks', {
@@ -80,17 +92,24 @@ workflowQueueEvents.on('failed', ({ jobId, failedReason }) => {
 export const initializeRedis = async () => {
   try {
     await connection.connect();
+    redisAvailable = true;
     logger.info('Redis connection initialized');
+    return true;
   } catch (error) {
+    redisAvailable = false;
     logger.error('Failed to connect to Redis', { error });
-    throw error;
+    return false;
   }
 };
+
+export const isRedisReady = (): boolean => redisAvailable && connection.isOpen;
 
 // Graceful shutdown
 export const closeQueues = async () => {
   await taskQueue.close();
   await workflowQueue.close();
-  await connection.quit();
+  if (connection.isOpen) {
+    await connection.quit();
+  }
   logger.info('Queues and Redis connection closed');
 };

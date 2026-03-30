@@ -2,7 +2,7 @@ import { PlannerAgent } from '../agents/planner';
 import Workflow from '../models/Workflow';
 import Task from '../models/Task';
 import Log from '../models/Log';
-import { taskQueue } from '../queues';
+import { taskQueue, isRedisReady } from '../queues';
 import { WorkflowValidator } from '../utils/validators';
 import logger from '../utils/logger';
 import { emitWorkflowUpdate, emitLogEvent } from '../sockets';
@@ -200,6 +200,10 @@ export class WorkflowService {
     tasks: any[],
     context: Record<string, any>
   ): Promise<void> {
+    if (!isRedisReady()) {
+      throw new Error('Task queue unavailable: Redis is not connected');
+    }
+
     const taskMap = new Map(tasks.map((t) => [t.taskId, t]));
     const completedTasks = new Set<string>();
 
