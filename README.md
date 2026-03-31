@@ -336,13 +336,18 @@ Output: {
 cd backend
 npm test
 
-# Frontend tests
+# Frontend unit tests
 cd frontend
 npm test
 
 # End-to-end tests
-npm run test:e2e
+# Not configured yet
 ```
+
+Current status:
+- Backend Jest test suites are implemented and passing.
+- Frontend Vitest unit test setup is implemented and passing.
+- End-to-end test setup is pending.
 
 ## 📦 Deployment
 
