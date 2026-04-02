@@ -179,8 +179,9 @@ export class ExecutorAgent {
     }
   }
 
-  private async executeCalendarCreate(task: Task, context: Record<string, any>): Promise<ExecutionResult> {
+  private async executeCalendarCreate(task: Task, _context: Record<string, any>): Promise<ExecutionResult> {
     try {
+      void _context;
       const { title, duration, date } = task.inputs;
 
       if (!title) {
@@ -208,8 +209,9 @@ export class ExecutorAgent {
     }
   }
 
-  private async executeSlackNotify(task: Task, context: Record<string, any>): Promise<ExecutionResult> {
+  private async executeSlackNotify(task: Task, _context: Record<string, any>): Promise<ExecutionResult> {
     try {
+      void _context;
       const { channel, message } = task.inputs;
 
       if (!channel || !message) {
@@ -236,8 +238,9 @@ export class ExecutorAgent {
     }
   }
 
-  private async executeNotionCreate(task: Task, context: Record<string, any>): Promise<ExecutionResult> {
+  private async executeNotionCreate(task: Task, _context: Record<string, any>): Promise<ExecutionResult> {
     try {
+      void _context;
       const { title, content } = task.inputs;
 
       if (!title) {

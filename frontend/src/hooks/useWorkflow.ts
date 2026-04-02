@@ -10,7 +10,6 @@ export const useWorkflow = (workflowId?: string) => {
     workflows,
     tasks,
     logs,
-    currentWorkflowId,
     loading,
     error,
     setWorkflow,

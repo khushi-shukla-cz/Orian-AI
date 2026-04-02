@@ -121,9 +121,14 @@ export const useWorkflowStore = create<WorkflowStore>((set) => ({
 
   clearWorkflow: (workflowId) =>
     set((state) => {
-      const { [workflowId]: removedWorkflow, ...remainingWorkflows } = state.workflows;
-      const { [workflowId]: removedTasks, ...remainingTasks } = state.tasks;
-      const { [workflowId]: removedLogs, ...remainingLogs } = state.logs;
+      const remainingWorkflows = { ...state.workflows };
+      delete remainingWorkflows[workflowId];
+
+      const remainingTasks = { ...state.tasks };
+      delete remainingTasks[workflowId];
+
+      const remainingLogs = { ...state.logs };
+      delete remainingLogs[workflowId];
 
       return {
         workflows: remainingWorkflows,

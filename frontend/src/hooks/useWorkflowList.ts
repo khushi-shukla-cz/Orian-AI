@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useWorkflowStore } from '@/store/workflowStore';
 import { apiService } from '@/services/api';
-import type { Workflow } from '@/types';
 
 export const useWorkflowList = () => {
   const { workflows, setWorkflows, setLoading, setError } = useWorkflowStore();

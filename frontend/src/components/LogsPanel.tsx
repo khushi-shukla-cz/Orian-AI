@@ -1,6 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import { formatDate } from '@/utils/helpers';
 import type { Log } from '@/types';
 import { Info, AlertTriangle, XCircle, Bug } from 'lucide-react';
 
@@ -57,7 +56,7 @@ export const LogsPanel: React.FC<LogsPanelProps> = ({ logs, autoScroll = true })
       {/* Logs */}
       <div className="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
         <AnimatePresence mode="popLayout">
-          {logs.map((log, index) => (
+          {logs.map((log) => (
             <motion.div
               key={log._id}
               initial={{ opacity: 0, y: -10, height: 0 }}

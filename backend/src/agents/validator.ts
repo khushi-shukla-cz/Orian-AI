@@ -17,7 +17,7 @@ export class ValidatorAgent {
     const issues: string[] = [];
 
     // Check 1: API response format
-    if (!result.hasOwnProperty('success')) {
+    if (!Object.prototype.hasOwnProperty.call(result, 'success')) {
       issues.push('Result missing success field');
     }
 
