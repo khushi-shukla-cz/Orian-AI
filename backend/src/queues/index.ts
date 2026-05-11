@@ -1,9 +1,19 @@
-import { Queue, QueueEvents } from 'bullmq';
+import { Queue, QueueEvents, ConnectionOptions } from 'bullmq';
 import { createClient } from 'redis';
 import config from '../config';
 import logger from '../utils/logger';
 
 let redisAvailable = false;
+
+const redisUrl = new URL(config.redis.url);
+
+export const bullConnection: ConnectionOptions = {
+  host: redisUrl.hostname,
+  port: Number(redisUrl.port || 6379),
+  ...(redisUrl.username ? { username: decodeURIComponent(redisUrl.username) } : {}),
+  ...(redisUrl.password ? { password: decodeURIComponent(redisUrl.password) } : {}),
+  ...(redisUrl.protocol === 'rediss:' ? { tls: {} } : {}),
+};
 
 // Redis connection
 const connection = createClient({
@@ -25,7 +35,7 @@ connection.on('end', () => {
 
 // Task execution queue
 export const taskQueue = new Queue('workflow-tasks', {
-  connection,
+  connection: bullConnection,
   defaultJobOptions: {
     attempts: config.queue.maxRetries,
     backoff: {
@@ -45,7 +55,7 @@ export const taskQueue = new Queue('workflow-tasks', {
 
 // Queue events for monitoring
 export const taskQueueEvents = new QueueEvents('workflow-tasks', {
-  connection,
+  connection: bullConnection,
 });
 
 taskQueueEvents.on('completed', ({ jobId }) => {
@@ -62,7 +72,7 @@ taskQueueEvents.on('progress', ({ jobId, data }) => {
 
 // Workflow orchestration queue
 export const workflowQueue = new Queue('workflows', {
-  connection,
+  connection: bullConnection,
   defaultJobOptions: {
     attempts: 1, // Workflows are not retried, individual tasks are
     removeOnComplete: {
@@ -77,7 +87,7 @@ export const workflowQueue = new Queue('workflows', {
 });
 
 export const workflowQueueEvents = new QueueEvents('workflows', {
-  connection,
+  connection: bullConnection,
 });
 
 workflowQueueEvents.on('completed', ({ jobId }) => {

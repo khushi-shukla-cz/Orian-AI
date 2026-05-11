@@ -44,6 +44,7 @@ export const errorHandler = (
 };
 
 export const notFoundHandler = (req: Request, res: Response): void => {
+  void req;
   res.status(404).json({
     success: false,
     error: 'Route not found',

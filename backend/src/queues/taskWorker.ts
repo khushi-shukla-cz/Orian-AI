@@ -1,5 +1,4 @@
 import { Worker, Job } from 'bullmq';
-import { createClient } from 'redis';
 import config from '../config';
 import logger from '../utils/logger';
 import { ExecutorAgent } from '../agents/executor';
@@ -10,10 +9,7 @@ import Workflow from '../models/Workflow';
 import Log from '../models/Log';
 import { Task as TaskType } from '../utils/validators';
 import { emitTaskUpdate, emitLogEvent } from '../sockets';
-
-const connection = createClient({
-  url: config.redis.url,
-});
+import { bullConnection } from './index';
 
 interface TaskJobData {
   workflowId: string;
@@ -229,7 +225,7 @@ export const taskWorker = new Worker<TaskJobData>(
     }
   },
   {
-    connection,
+    connection: bullConnection,
     concurrency: config.queue.concurrency,
   }
 );

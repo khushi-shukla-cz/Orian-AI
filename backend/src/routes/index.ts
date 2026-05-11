@@ -16,7 +16,8 @@ router.post('/workflows/simulate', (req, res, next) =>
 );
 
 // Health check
-router.get('/health', (req, res) => {
+router.get('/health', (_req, res) => {
+  void _req;
   res.status(200).json({
     success: true,
     message: 'Server is running',
