@@ -1,0 +1,26 @@
+{
+  "name": "orion-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "ci:backend": "cd backend && npm ci && npm run lint && npm run build && npm test",
+    "ci:frontend": "cd frontend && npm ci && npm run lint && npm run build && npm test",
+    "ci": "npm run ci:backend && npm run ci:frontend",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0",
+    "lint-staged": "^14.0.0"
+  },
+  "lint-staged": {
+    "backend/src/**/*.{ts,js}": [
+      "eslint --fix",
+      "git add"
+    ],
+    "frontend/src/**/*.{ts,tsx,js,jsx}": [
+      "eslint --fix",
+      "prettier --write",
+      "git add"
+    ]
+  }
+}
