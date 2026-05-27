@@ -68,7 +68,7 @@ jobs:
         run: npm test -- --runInBand
 
       - name: Upload backend test artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: backend-test-reports
           path: backend/reports || backend/coverage || ''
@@ -108,7 +108,7 @@ jobs:
         run: npm test
 
       - name: Upload frontend test artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: frontend-test-reports
           path: frontend/reports || frontend/coverage || ''
