@@ -1,0 +1,4 @@
+# Code owners for critical areas
+/backend/ @khushi-shukla-cz
+/frontend/ @khushi-shukla-cz
+/.github/ @khushi-shukla-cz
