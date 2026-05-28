@@ -1,7 +1,24 @@
-export type WorkflowStatus = 'pending' | 'planning' | 'executing' | 'completed' | 'failed' | 'cancelled';
-export type TaskStatus = 'pending' | 'running' | 'completed' | 'failed' | 'retrying' | 'skipped';
-export type TaskType = 'email_send' | 'calendar_create' | 'slack_notify' | 'notion_create' | 'summarize_text';
-export type LogLevel = 'INFO' | 'WARN' | 'ERROR' | 'DEBUG';
+export type WorkflowStatus =
+  | "pending"
+  | "planning"
+  | "executing"
+  | "completed"
+  | "failed"
+  | "cancelled";
+export type TaskStatus =
+  | "pending"
+  | "running"
+  | "completed"
+  | "failed"
+  | "retrying"
+  | "skipped";
+export type TaskType =
+  | "email_send"
+  | "calendar_create"
+  | "slack_notify"
+  | "notion_create"
+  | "summarize_text";
+export type LogLevel = "INFO" | "WARN" | "ERROR" | "DEBUG";
 
 export interface Task {
   id: string;
@@ -147,4 +164,44 @@ export interface SimulateWorkflowResponse {
     confidence_score: number;
     task_count: number;
   };
+}
+
+export interface MvpWorkflowLog {
+  level: LogLevel;
+  message: string;
+  timestamp: string;
+}
+
+export interface MvpWorkflow {
+  id: string;
+  name: string;
+  input: string;
+  status: WorkflowStatus;
+  createdAt: string;
+  updatedAt: string;
+  logs: MvpWorkflowLog[];
+}
+
+export interface CreateMvpWorkflowRequest {
+  input: string;
+  name?: string;
+}
+
+export interface CreateMvpWorkflowResponse {
+  success: boolean;
+  data: {
+    id: string;
+    status: WorkflowStatus;
+    name: string;
+  };
+}
+
+export interface ListMvpWorkflowsResponse {
+  success: boolean;
+  data: MvpWorkflow[];
+}
+
+export interface GetMvpWorkflowResponse {
+  success: boolean;
+  data: MvpWorkflow;
 }

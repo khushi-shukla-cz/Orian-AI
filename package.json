@@ -14,13 +14,11 @@
   },
   "lint-staged": {
     "backend/src/**/*.{ts,js}": [
-      "eslint --fix",
-      "git add"
+      "npm --prefix backend run lint:fix"
     ],
     "frontend/src/**/*.{ts,tsx,js,jsx}": [
-      "eslint --fix",
-      "prettier --write",
-      "git add"
+      "npm --prefix frontend run lint:fix",
+      "npm --prefix frontend run format:fix"
     ]
   }
 }

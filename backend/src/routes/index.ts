@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import { WorkflowController } from '../controllers/workflowController';
+import { MVPController } from '../controllers/mvpController';
 
 const router = Router();
 const workflowController = new WorkflowController();
+const mvpController = new MVPController();
 
 // Workflow routes
 router.post('/workflows', (req, res, next) => workflowController.createWorkflow(req, res, next));
@@ -26,3 +28,8 @@ router.get('/health', (_req, res) => {
 });
 
 export default router;
+
+// MVP routes (in-memory small-scope endpoints for early product)
+router.post('/mvp/workflows', (req, res, next) => mvpController.create(req, res, next));
+router.get('/mvp/workflows', (req, res, next) => mvpController.list(req, res, next));
+router.get('/mvp/workflows/:id', (req, res, next) => mvpController.get(req, res, next));

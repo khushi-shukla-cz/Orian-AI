@@ -329,6 +329,28 @@ Output: {
 | `VITE_API_URL` | Backend API URL | `http://localhost:5000/api/v1` |
 | `VITE_SOCKET_URL` | Socket.IO URL | `http://localhost:5000` |
 
+## 🧩 MVP Preview
+
+The current MVP focuses on a lightweight workflow experience:
+
+- Create a workflow from a short natural-language instruction.
+- Store it in memory for fast iteration.
+- Show the workflow list, current status, and event logs in the frontend.
+- Simulate execution with a short-lived in-memory state transition.
+
+### MVP Routes
+
+- Frontend: `http://localhost:3000`
+- Backend create/list: `POST /api/v1/mvp/workflows`, `GET /api/v1/mvp/workflows`
+- Backend details: `GET /api/v1/mvp/workflows/:id`
+
+### MVP Environment
+
+Copy `.env.example` to `.env` and verify these frontend values are present:
+
+- `VITE_API_URL=http://localhost:5000/api/v1`
+- `VITE_SOCKET_URL=http://localhost:5000`
+
 ## 🧪 Testing
 
 ```bash
